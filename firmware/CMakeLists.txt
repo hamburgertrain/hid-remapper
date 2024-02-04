@@ -27,6 +27,10 @@ if(PICO_BOARD STREQUAL "pico")
 add_compile_definitions(GPIO_VALID_PINS_BASE=0b00011100011111111111111111111111)
 endif()
 
+if(PICO_BOARD STREQUAL "pico_w")
+add_compile_definitions(GPIO_VALID_PINS_BASE=0b00011100011111111111111111111111)
+endif()
+
 
 add_executable(remapper
     src/main.cc
@@ -54,6 +58,12 @@ target_compile_definitions(remapper PUBLIC PICO_DEFAULT_UART_RX_PIN=17)
 target_compile_definitions(remapper PUBLIC PICO_DEFAULT_PIO_USB_DP_PIN=0)
 endif()
 
+if(PICO_BOARD STREQUAL "pico_w")
+target_compile_definitions(remapper PUBLIC PICO_DEFAULT_UART_TX_PIN=16)
+target_compile_definitions(remapper PUBLIC PICO_DEFAULT_UART_RX_PIN=17)
+target_compile_definitions(remapper PUBLIC PICO_DEFAULT_PIO_USB_DP_PIN=0)
+endif()
+
 target_include_directories(remapper PRIVATE
     src
     src/tusb_config_both
@@ -74,8 +84,6 @@ target_link_libraries(remapper
     usb_midi_host
 )
 
-pico_set_binary_type(remapper copy_to_ram)
-pico_set_linker_script(remapper ${CMAKE_CURRENT_LIST_DIR}/remapper_single.ld)
 pico_add_extra_outputs(remapper)
 
 
